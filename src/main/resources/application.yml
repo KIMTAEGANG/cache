@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://172.20.0.106:3306/dreamsearch
+    username: tgkim
+    password: xorkd540!!
+    driver-class-name: org.mariadb.jdbc.Driver
+mybatis:
+  type-aliases-package: com.example.test
+  mapper-locations: mybatis/mapper/*.xml
