@@ -25,9 +25,9 @@ public class ProductController {
 
     private final static Logger log = LoggerFactory.getLogger(ProductController.class);
 
-    @GetMapping(value = {"/getId"}, produces = "application/json")
-    public @ResponseBody
-    List<Map<String, Object>> getId(@RequestParam(value = "userid") String userid, @RequestParam(value = "pcode") String pcode) {
+    @GetMapping(value = "getId", produces = "application/json")
+    @ResponseBody
+    public List<Map<String, Object>> getId(@RequestParam(value = "userid") String userid, @RequestParam(value = "pcode") String pcode) {
         try {
             long startTime = System.currentTimeMillis();
             List<Map<String,Object>> temp = productService.getId(userid,pcode);
@@ -36,7 +36,7 @@ public class ProductController {
             return temp;
 
         } catch (Exception e) {
-            log.error("Error!!!! MEmeber Id Search Error >>>>{}", e);
+            log.error("Error!!!! user Id Search Error >>>>{}", e);
             return null;
         }
 
