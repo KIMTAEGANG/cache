@@ -5,4 +5,5 @@ import java.util.Map;
 
 public interface ProductService {
     List<Map <String, Object>> getId(String userid, String pcode);
+    List<Map <String, Object>> getIdM(String userid, String pcode);
 }

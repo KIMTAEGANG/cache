@@ -4,8 +4,18 @@
          updateCheck="false">
     <diskStore path="java.io.tmpdir" />
 
+
     <cache
             name="getMember"
+            maxElementInMoney="10000"
+            overflowToDisk="false"
+            eternal="false"
+            memoryStoreEvictionPolicy="LRU"
+            timeToTdleSeconds="300"
+            timeToLiveSecond="600">
+    </cache>
+    <cache
+            name="getMemberM"
             maxElementInMoney="10000"
             overflowToDisk="false"
             eternal="false"
