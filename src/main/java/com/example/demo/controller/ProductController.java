@@ -128,12 +128,14 @@ public class ProductController {
             String redisKey = "getMemberM::"+userid+","+pcode;
             String redisValue = jedis.get(redisKey);
             if(redisValue != null){
+                cache.put(cacheKey,redisValue);
                 mv.addObject("redisValueM",redisValue);
                 return mv;
             }
 
             List<Map<String, Object>> temp = productService.getIdM(userid,pcode);
             jedis.set(redisKey, String.valueOf(temp));
+            cache.put(cacheKey,temp);
             mv.addObject("tempM",temp);
             return mv;
         }catch (Exception e){
