@@ -5,9 +5,20 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Insert title here</title>
 </head>
+<script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script>
+   /* $(function (){
+        // alert(userid)
+        //alert(pcode)
+        $("#sBtn").click(function(){
+                 location.href ="getId/"+$("#userid").val()+"/"+$("#pcode").val()
+            })
+
+    });*/
+</script>
 <body>
 userid와 pcode로 검색
-<form method="get" action="getId" >
+<form method="get" action = "/getId">
     <input type="userid" id="userid" name="userid" value="${userid}"/>
     <input type="pcode" id="pcode" name="pcode" value="${pcode}"/>
     <input type="submit" id="sBtn" value="검색" />

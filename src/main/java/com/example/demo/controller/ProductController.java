@@ -54,17 +54,20 @@ public class ProductController {
 
     private final static Logger log = LoggerFactory.getLogger(ProductController.class);
 
+
+
     @GetMapping(value = "getId", produces = "application/json")
     @ResponseBody
     public ModelAndView getId(@RequestParam(value = "userid") String userid, @RequestParam(value = "pcode") String pcode, ModelAndView mv) {
 
         try {
             Cache cache = cacheManager.getCache("getMember");
+
             //캐시 키를 배열로 저장
             ArrayList<String> ehcacheKey = new ArrayList<>();
             ehcacheKey.add(userid);
             ehcacheKey.add(pcode);
-            mv.setViewName("cache.jsp");
+            mv.setViewName("cache");
             mv.addObject("userid",userid);
             mv.addObject("pcode",pcode);
 
@@ -83,6 +86,7 @@ public class ProductController {
                 long startTime = System.currentTimeMillis();
                 long elapsedTime = System.currentTimeMillis() - startTime;
                 log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
+                cache.put(ehcacheKey,redisValue);
                 mv.addObject("redisValue",redisValue);
                 return mv;
             }
@@ -91,6 +95,7 @@ public class ProductController {
             long elapsedTime = System.currentTimeMillis() - startTime;
             log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
             jedis.set(rediskey, String.valueOf(temp));
+            cache.put(ehcacheKey,temp);
             mv.addObject("temp",temp);
             return mv;
 
@@ -107,7 +112,7 @@ public class ProductController {
     @ResponseBody
     public ModelAndView getIdM(@RequestParam("userid") String userid, @RequestParam("pcode") String pcode, ModelAndView mv){
         try{
-            mv.setViewName("cacheM.jsp");
+            mv.setViewName("cacheM");
             mv.addObject("userid",userid);
             mv.addObject("pcode",pcode);
 
