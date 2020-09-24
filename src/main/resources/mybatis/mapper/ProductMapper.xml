@@ -5,12 +5,12 @@
 
     <select id="getId" parameterType="String" resultType="java.util.HashMap">
         select USERID,PCODE,PNM,IMGPATH from dreamsearch.SHOP_DATA
-        where userid = #{userid} and pcode like concat('%',#{pcode},'%')
+        where userid=#{userid} and pcode like concat('%',#{pcode},'%')
     </select>
 
     <select id="getIdM" parameterType="String" resultType="java.util.HashMap">
         select USERID,PCODE,PNM,IMGPATH from dreamsearch.SHOP_DATA
-        where userid = #{userid} and pcode like concat('%',#{pcode},'%')
+        where userid=#{userid} and pcode like concat('%',#{pcode},'%')
     </select>
 
 </mapper>
