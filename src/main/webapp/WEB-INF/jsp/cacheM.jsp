@@ -12,7 +12,7 @@
 <script>
     $(function (){
         $("#sBtn").click(function(){
-            location.href ="?userid="+$("#userid").val()+"&pcode="+$("#pcode").val()
+            location.href ="?userid="+$("#userid").val()+"&pcode="+$("#pcode").val()+"&category="+$("#category").val();
         });
 
         $("#ehcacheBtn").click(function(){
@@ -36,6 +36,12 @@
             </div>
             <table class="table">
                 <tr>
+                    <td width="50px;">
+                        <select id="category" style="width:100px;height: 33px;">
+                            <option value="">로직</option>
+                            <option value="total">전체조회</option>
+                        </select>
+                    </td>
                     <td><input type="text" class="form-control" id="userid" name="userid" value="${userid}"/></td>
                     <td><input type="text" class="form-control" id="pcode" name="pcode" value="${pcode}"/></td>
                     <td><input type="submit" class="form-control" id="sBtn" value="검색" /></td>
