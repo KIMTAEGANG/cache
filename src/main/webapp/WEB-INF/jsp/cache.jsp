@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,8 +13,16 @@
 <script>
     $(function (){
         $("#sBtn").click(function(){
-                 location.href ="?userid="+$("#userid").val()+"&pcode="+$("#pcode").val()
-            })
+             location.href ="?userid="+$("#userid").val()+"&pcode="+$("#pcode").val()
+        });
+
+        $("#ehcacheBtn").click(function(){
+            location.href="ehcacheDel"
+        });
+
+        $("#redisBtn").click(function(){
+            location.href="redisDel"
+        });
 
     });
 </script>
@@ -36,15 +45,18 @@
             <table class="table">
                 <tr>
                     <td width="100">ehcache</td>
-                    <td colspan="2">${ehcacheKey}<br/><br/></td>
+                    <td>${ehcacheKey}<br/><br/></td>
+                    <td style="text-align:right;"><button type="button" class="btn btn-primary" id="ehcacheBtn">Delete</button></td>
                 </tr>
                 <tr>
                     <td width="100">redis</td>
-                    <td colspan="2">${redisValue}<br/><br/></td>
+                    <td>${redisValue}<br/><br/></td>
+                    <td style="text-align:right;"><button type="button" class="btn btn-primary" id="redisBtn">Delete</button></td>
                 </tr>
                 <tr>
                     <td width="100">db</td>
-                    <td colspan="2">${temp}<br/><br/></td>
+                    <td>${temp}<br/><br/></td>
+                    <td style="text-align:right;"></td>
                 </tr>
             </table>
         </div>

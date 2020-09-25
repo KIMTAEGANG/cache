@@ -16,6 +16,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +25,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 
 
+import java.net.http.HttpRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,6 +56,32 @@ public class ProductController {
 
     private final static Logger log = LoggerFactory.getLogger(ProductController.class);
 
+
+    @RequestMapping("ehcacheDel")
+    public String ehcacheDel(ModelAndView mv){
+        Cache cache = cacheManager.getCache("getMember");
+        cache.clear();
+        return "redirect:getId?userid=&pcode=";
+    }
+
+    @RequestMapping("ehcacheMDel")
+    public String ehcacheMDel(){
+        Cache cache = cacheManager.getCache("getMemberM");
+        cache.clear();
+        return "redirect:getIdM?userid=&pcode=";
+    }
+
+    @RequestMapping("redisDel")
+    public String redisDel(){
+        jedis.flushAll();
+        return "redirect:getId?userid=&pcode=";
+    }
+
+    @RequestMapping("redisMDel")
+    public String redisMDel(){
+        jedis.flushAll();
+        return "redirect:getIdM?userid=&pcode=";
+    }
 
 
     @GetMapping(value = "getId", produces = "application/json")
@@ -90,15 +118,19 @@ public class ProductController {
                 mv.addObject("redisValue",redisValue);
                 return mv;
             }
-            List<Map<String, Object>> temp = productService.getId(userid, pcode);
-            long startTime = System.currentTimeMillis();
-            long elapsedTime = System.currentTimeMillis() - startTime;
-            log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
-            jedis.set(rediskey, String.valueOf(temp));
-            cache.put(ehcacheKey,temp);
-            mv.addObject("temp",temp);
-            return mv;
 
+            if("".equals(userid) && "".equals(pcode)) {
+                return mv;
+            }else {
+                List<Map<String, Object>> temp = productService.getId(userid, pcode);
+                long startTime = System.currentTimeMillis();
+                long elapsedTime = System.currentTimeMillis() - startTime;
+                log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
+                jedis.set(rediskey, String.valueOf(temp));
+                cache.put(ehcacheKey, temp);
+                mv.addObject("temp", temp);
+                return mv;
+            }
 
         } catch (Exception e) {
             log.error("Error!!!! user Id Search Error >>>>{}", e);
@@ -132,12 +164,15 @@ public class ProductController {
                 mv.addObject("redisValueM",redisValue);
                 return mv;
             }
-
-            List<Map<String, Object>> temp = productService.getIdM(userid,pcode);
-            jedis.set(redisKey, String.valueOf(temp));
-            cache.put(cacheKey,temp);
-            mv.addObject("tempM",temp);
-            return mv;
+            if("".equals(userid) && "".equals(pcode)){
+                return mv;
+            }else {
+                List<Map<String, Object>> temp = productService.getIdM(userid, pcode);
+                jedis.set(redisKey, String.valueOf(temp));
+                cache.put(cacheKey, temp);
+                mv.addObject("tempM", temp);
+                return mv;
+            }
         }catch (Exception e){
             log.error("Error!!!! user Id Search Error >>>>{}", e);
             return null;

@@ -13,7 +13,15 @@
     $(function (){
         $("#sBtn").click(function(){
             location.href ="?userid="+$("#userid").val()+"&pcode="+$("#pcode").val()
-        })
+        });
+
+        $("#ehcacheBtn").click(function(){
+            location.href="ehcacheMDel"
+        });
+
+        $("#redisBtn").click(function(){
+            location.href="redisMDel"
+        });
 
     });
 </script>
@@ -37,14 +45,17 @@
                 <tr>
                     <td width="100">ehcacheM</td>
                     <td colspan="2">${ehcachKeyM}<br/><br/></td>
+                    <td style="text-align:right;"><button type="button" class="btn btn-primary" id="ehcacheBtn">Delete</button></td>
                 </tr>
                 <tr>
                     <td width="100">redisM</td>
                     <td colspan="2">${redisValueM}<br/><br/></td>
+                    <td style="text-align:right;"><button type="button" class="btn btn-primary" id="redisBtn">Delete</button></td>
                 </tr>
                 <tr>
                     <td width="100">dbM</td>
                     <td colspan="2">${tempM}<br/><br/></td>
+                    <td style="text-align:right;"></td>
                 </tr>
             </table>
         </div>
