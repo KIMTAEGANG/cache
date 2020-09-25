@@ -198,13 +198,13 @@ public class ProductController {
                 }
             } else if("total".equals(category)){
                 if(cache.get(cacheKey) != null)
-                    mv.addObject("ehcachKeyM", cache.get(cacheKey).get());
+                    mv.addObject("ehcacheKey", cache.get(cacheKey).get());
 
                 if(redisValue != null)
-                    mv.addObject("redisValueM", redisValue);
+                    mv.addObject("redisValue", redisValue);
 
                 List<Map<String, Object>> temp = productService.getId(userid, pcode);
-                mv.addObject("tempM", temp);
+                mv.addObject("temp", temp);
 
                 return mv;
             }

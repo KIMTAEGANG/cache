@@ -51,7 +51,7 @@
             <table class="table">
                 <tr>
                     <td width="100">ehcache</td>
-                    <td>${ehcacheKey}<br/><br/></td>
+                    <td>${ehcacheVal}<br/><br/></td>
                     <td style="text-align:right;"><button type="button" class="btn btn-primary" id="ehcacheBtn">Delete</button></td>
                 </tr>
                 <tr>
@@ -61,7 +61,7 @@
                 </tr>
                 <tr>
                     <td width="100">db</td>
-                    <td>${temp}<br/><br/></td>
+                    <td>${getDB}<br/><br/></td>
                     <td style="text-align:right;"></td>
                 </tr>
             </table>

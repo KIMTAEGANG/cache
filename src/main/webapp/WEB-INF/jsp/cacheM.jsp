@@ -50,7 +50,7 @@
             <table class="table">
                 <tr>
                     <td width="100">ehcacheM</td>
-                    <td colspan="2">${ehcachKeyM}<br/><br/></td>
+                    <td colspan="2">${ehcachValM}<br/><br/></td>
                     <td style="text-align:right;"><button type="button" class="btn btn-primary" id="ehcacheBtn">Delete</button></td>
                 </tr>
                 <tr>
@@ -60,7 +60,7 @@
                 </tr>
                 <tr>
                     <td width="100">dbM</td>
-                    <td colspan="2">${tempM}<br/><br/></td>
+                    <td colspan="2">${getDBM}<br/><br/></td>
                     <td style="text-align:right;"></td>
                 </tr>
             </table>
