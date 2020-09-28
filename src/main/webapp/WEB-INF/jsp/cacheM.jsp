@@ -26,7 +26,6 @@
         $("#redisBtn").click(function(){
             location.href="redisMDel"
         });
-
     });
 </script>
 <body>
@@ -43,7 +42,7 @@
                     <td width="50px;">
                         <select id="check" style="width:100px;height: 33px;">
                             <option value="web">web</option>
-                            <option value="mobile">mobile</option>
+                            <option value="mobile" selected>mobile</option>
                         </select>
                     </td>
                     <td><input type="text" class="form-control" id="userid" name="userid" value="${userid}"/></td>

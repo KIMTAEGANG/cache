@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -27,7 +26,6 @@
         $("#redisBtn").click(function(){
             location.href="redisDel";
         });
-
     });
 </script>
 <body>
@@ -43,7 +41,7 @@
                 <tr>
                     <td width="50px;">
                         <select id="check" style="width:100px;height: 33px;">
-                            <option value="web">web</option>
+                            <option value="web" selected>web</option>
                             <option value="mobile">mobile</option>
                         </select>
                     </td>
