@@ -11,7 +11,7 @@ import java.util.Map;
 @Service
 public class ProductServiceImp implements ProductService {
 
-    private ProductMapper productMapper;
+    private final ProductMapper productMapper;
 
     @Autowired
     ProductServiceImp(
@@ -26,10 +26,10 @@ public class ProductServiceImp implements ProductService {
     public List<Map<String, Object>> getId(String userid, String pcode) {
         return productMapper.getId(userid, pcode);
     }
+
     @Override
     @Cacheable(cacheNames = "getMemberM", key = "{#userid, #pcode}", unless = "#result == null")
     public List<Map<String, Object>> getIdM(String userid, String pcode) {
         return productMapper.getIdM(userid, pcode);
     }
-
 }

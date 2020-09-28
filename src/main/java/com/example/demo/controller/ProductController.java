@@ -60,33 +60,32 @@ public class ProductController {
     public String ehcacheDel(ModelAndView mv){
         Cache cache = cacheManager.getCache("getMember");
         cache.clear();
-        return "redirect:getId?userid=&pcode=&category=";
+        return "redirect:getId?userid=&pcode=";
     }
 
     @RequestMapping("ehcacheMDel")
     public String ehcacheMDel(){
         Cache cache = cacheManager.getCache("getMemberM");
         cache.clear();
-        return "redirect:getIdM?userid=&pcode=&category=";
+        return "redirect:getIdM?userid=&pcode=";
     }
 
     @RequestMapping("redisDel")
     public String redisDel(){
         jedis.flushAll();
-        return "redirect:getId?userid=&pcode=&category=";
+        return "redirect:getId?userid=&pcode=";
     }
 
     @RequestMapping("redisMDel")
     public String redisMDel(){
         jedis.flushAll();
-        return "redirect:getIdM?userid=&pcode=&category=";
+        return "redirect:getIdM?userid=&pcode=";
     }
 
 
     @GetMapping(value = "getId", produces = "application/json")
     @ResponseBody
-    public ModelAndView getId(@RequestParam(value = "userid") String userid, @RequestParam(value = "pcode") String pcode,
-                              @RequestParam(value = "category") String category, ModelAndView mv) {
+    public ModelAndView getId(@RequestParam(value = "userid") String userid, @RequestParam(value = "pcode") String pcode, ModelAndView mv) {
 
         try {
             Cache cache = cacheManager.getCache("getMember");
@@ -103,112 +102,70 @@ public class ProductController {
             String rediskey = "getMember::" + userid + "," + pcode;
             String redisValue = jedis.get(rediskey);
 
-            if (category == "") {
 
-
-                if (cache.get(ehcacheKey) != null) {
-                    long startTime = System.currentTimeMillis();
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
-                    mv.addObject("ehcacheKey", cache.get(ehcacheKey).get());
-                    return mv;
-                }
-
-
-                if (redisValue != null) {
-                    long startTime = System.currentTimeMillis();
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
-                    cache.put(ehcacheKey, redisValue);
-                    mv.addObject("redisValue", redisValue);
-                    return mv;
-                }
-
-                if ("".equals(userid) && "".equals(pcode)) {
-                    return mv;
-                } else {
-                    List<Map<String, Object>> temp = productService.getId(userid, pcode);
-                    long startTime = System.currentTimeMillis();
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
-                    jedis.set(rediskey, String.valueOf(temp));
-                    cache.put(ehcacheKey, temp);
-                    mv.addObject("temp", temp);
-                    return mv;
-                }
-            } else if ("total".equals(category)){
-                if(cache.get(ehcacheKey) != null)
-                mv.addObject("ehcacheKey", cache.get(ehcacheKey).get());
-
-                if(redisValue != null)
-                mv.addObject("redisValue", redisValue);
-
-                List<Map<String, Object>> temp = productService.getId(userid, pcode);
-                mv.addObject("temp", temp);
-
+            if (cache.get(ehcacheKey) != null) {
+                mv.addObject("ehcacheVal", cache.get(ehcacheKey).get());
                 return mv;
             }
-            return mv;
+
+
+            if (redisValue != null) {
+                cache.put(ehcacheKey, redisValue);
+                mv.addObject("redisValue", redisValue);
+                return mv;
+            }
+
+            if ("".equals(userid) && "".equals(pcode)) {
+                return mv;
+            } else {
+                List<Map<String, Object>> getDB = productService.getId(userid, pcode);
+                jedis.set(rediskey, String.valueOf(getDB));
+                cache.put(ehcacheKey, getDB);
+                mv.addObject("getDB", getDB);
+                return mv;
+            }
 
         } catch (Exception e) {
             log.error("Error!!!! user Id Search Error >>>>{}", e);
             return null;
         }
-
-
     }
 
     @GetMapping(value="getIdM", produces = "application/json")
     @ResponseBody
-    public ModelAndView getIdM(@RequestParam("userid") String userid, @RequestParam("pcode") String pcode,
-                               @RequestParam("category") String category, ModelAndView mv){
+    public ModelAndView getIdM(@RequestParam("userid") String userid, @RequestParam("pcode") String pcode, ModelAndView mv){
         try{
             mv.setViewName("cacheM");
             mv.addObject("userid",userid);
             mv.addObject("pcode",pcode);
 
             Cache cache = cacheManager.getCache("getMemberM");
-            ArrayList<String> cacheKey = new ArrayList<>();
-            cacheKey.add(userid);
-            cacheKey.add(pcode);
+            ArrayList<String> cacheKeyM = new ArrayList<>();
+            cacheKeyM.add(userid);
+            cacheKeyM.add(pcode);
 
-            String redisKey = "getMemberM::"+userid+","+pcode;
-            String redisValue = jedis.get(redisKey);
+            String redisKeyM = "getMemberM::"+userid+","+pcode;
+            String redisValueM = jedis.get(redisKeyM);
 
-
-            if(category == ""){
-                if(cache.get(cacheKey) != null){
-                    mv.addObject("ehcachKeyM",cache.get(cacheKey).get());
-                    return mv;
-                }
-
-                if(redisValue != null){
-                    cache.put(cacheKey,redisValue);
-                    mv.addObject("redisValueM",redisValue);
-                    return mv;
-                }
-                if("".equals(userid) && "".equals(pcode)){
-                    return mv;
-                }else {
-                    List<Map<String, Object>> temp = productService.getIdM(userid, pcode);
-                    jedis.set(redisKey, String.valueOf(temp));
-                    cache.put(cacheKey, temp);
-                    mv.addObject("tempM", temp);
-                    return mv;
-                }
-            } else if("total".equals(category)){
-                if(cache.get(cacheKey) != null)
-                    mv.addObject("ehcacheKey", cache.get(cacheKey).get());
-
-                if(redisValue != null)
-                    mv.addObject("redisValue", redisValue);
-
-                List<Map<String, Object>> temp = productService.getId(userid, pcode);
-                mv.addObject("temp", temp);
-
+            if(cache.get(cacheKeyM) != null){
+                mv.addObject("ehcachValM",cache.get(cacheKeyM).get());
                 return mv;
             }
-            return mv;
+
+            if(redisValueM != null){
+                cache.put(cacheKeyM,redisValueM);
+                mv.addObject("redisValueM",redisValueM);
+                return mv;
+            }
+            if("".equals(userid) && "".equals(pcode)){
+                return mv;
+            }else {
+                List<Map<String, Object>> getDBM = productService.getIdM(userid, pcode);
+                jedis.set(redisKeyM, String.valueOf(getDBM));
+                cache.put(cacheKeyM, getDBM);
+                mv.addObject("getDBM", getDBM);
+                return mv;
+            }
         }catch (Exception e){
             log.error("Error!!!! user Id Search Error >>>>{}", e);
             return null;
