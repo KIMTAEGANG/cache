@@ -12,7 +12,11 @@
 <script>
     $(function (){
         $("#sBtn").click(function(){
-            location.href ="?userid="+$("#userid").val()+"&pcode="+$("#pcode").val()+"&category="+$("#category").val();
+            if($("#check").val()=="web"){
+                location.href ="getId?userid="+$("#userid").val()+"&pcode="+$("#pcode").val();
+            }else if($("#check").val()=="mobile"){
+                location.href ="getIdM?userid="+$("#userid").val()+"&pcode="+$("#pcode").val();
+            }
         });
 
         $("#ehcacheBtn").click(function(){
@@ -37,9 +41,9 @@
             <table class="table">
                 <tr>
                     <td width="50px;">
-                        <select id="category" style="width:100px;height: 33px;">
-                            <option value="">로직</option>
-                            <option value="total">전체조회</option>
+                        <select id="check" style="width:100px;height: 33px;">
+                            <option value="web">web</option>
+                            <option value="mobile">mobile</option>
                         </select>
                     </td>
                     <td><input type="text" class="form-control" id="userid" name="userid" value="${userid}"/></td>
@@ -50,7 +54,7 @@
             <table class="table">
                 <tr>
                     <td width="100">ehcacheM</td>
-                    <td colspan="2">${ehcachKeyM}<br/><br/></td>
+                    <td colspan="2">${ehcachValM}<br/><br/></td>
                     <td style="text-align:right;"><button type="button" class="btn btn-primary" id="ehcacheBtn">Delete</button></td>
                 </tr>
                 <tr>
@@ -60,7 +64,7 @@
                 </tr>
                 <tr>
                     <td width="100">dbM</td>
-                    <td colspan="2">${tempM}<br/><br/></td>
+                    <td colspan="2">${getDBM}<br/><br/></td>
                     <td style="text-align:right;"></td>
                 </tr>
             </table>
