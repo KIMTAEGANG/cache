@@ -1,7 +1,8 @@
 package com.example.demo.controller;
 
-import com.example.demo.service.ProductService;
 
+
+import com.example.demo.service.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,38 +42,17 @@ public class ProductController {
 
     private final static Logger log = LoggerFactory.getLogger(ProductController.class);
 
-    @RequestMapping("ehcacheDel")
-    public String ehcacheDel(ModelAndView mv){
-        Cache cache = cacheManager.getCache("getMember");
-        cache.clear();
-        return "redirect:getId?userid=&pcode=&category=";
-    }
-
-    @RequestMapping("ehcacheMDel")
-    public String ehcacheMDel(){
-        Cache cache = cacheManager.getCache("getMemberM");
-        cache.clear();
-        return "redirect:getIdM?userid=&pcode=&category=";
-    }
-
-    @RequestMapping("redisDel")
-    public String redisDel(){
-        jedis.flushAll();
-        return "redirect:getId?userid=&pcode=&category=";
-    }
-
-    @RequestMapping("redisMDel")
-    public String redisMDel(){
-        jedis.flushAll();
-        return "redirect:getIdM?userid=&pcode=&category=";
-    }
-
+    //web
     @GetMapping(value = "getId", produces = "application/json")
     @ResponseBody
     public ModelAndView getId(@RequestParam(value = "userid") String userid, @RequestParam(value = "pcode") String pcode,
                               @RequestParam(value = "category") String category, ModelAndView mv) {
 
         try {
+            long startTime = System.currentTimeMillis();
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
+
             Cache cache = cacheManager.getCache("getMember");
 
             //캐시 키를 배열로 저장
@@ -91,18 +71,11 @@ public class ProductController {
 
 
                 if (cache.get(ehcacheKey) != null) {
-                    long startTime = System.currentTimeMillis();
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
                     mv.addObject("ehcacheKey", cache.get(ehcacheKey).get());
                     return mv;
                 }
 
-
                 if (redisValue != null) {
-                    long startTime = System.currentTimeMillis();
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
                     cache.put(ehcacheKey, redisValue);
                     mv.addObject("redisValue", redisValue);
                     return mv;
@@ -112,9 +85,6 @@ public class ProductController {
                     return mv;
                 } else {
                     List<Map<String, Object>> temp = productService.getId(userid, pcode);
-                    long startTime = System.currentTimeMillis();
-                    long elapsedTime = System.currentTimeMillis() - startTime;
-                    log.info(userid + "," + pcode + "   :::: SearchTime ::::  " + elapsedTime + "  :::::");
                     jedis.set(rediskey, String.valueOf(temp));
                     cache.put(ehcacheKey, temp);
                     mv.addObject("temp", temp);
@@ -138,10 +108,23 @@ public class ProductController {
             log.error("Error!!!! user Id Search Error >>>>{}", e);
             return null;
         }
-
-
     }
 
+    @RequestMapping("ehcacheDel")
+    public String ehcacheDel(ModelAndView mv){
+        Cache cache = cacheManager.getCache("getMember");
+        cache.clear();
+        return "redirect:getId?userid=&pcode=&category=";
+    }
+
+    @RequestMapping("redisDel")
+    public String redisDel(){
+        jedis.flushAll();
+        return "redirect:getId?userid=&pcode=&category=";
+    }
+
+
+    //Mobile
     @GetMapping(value="getIdM", produces = "application/json")
     @ResponseBody
     public ModelAndView getIdM(@RequestParam("userid") String userid, @RequestParam("pcode") String pcode,
@@ -197,5 +180,18 @@ public class ProductController {
             log.error("Error!!!! user Id Search Error >>>>{}", e);
             return null;
         }
+    }
+
+    @RequestMapping("ehcacheMDel")
+    public String ehcacheMDel(){
+        Cache cache = cacheManager.getCache("getMemberM");
+        cache.clear();
+        return "redirect:getIdM?userid=&pcode=&category=";
+    }
+
+    @RequestMapping("redisMDel")
+    public String redisMDel(){
+        jedis.flushAll();
+        return "redirect:getIdM?userid=&pcode=&category=";
     }
 }
