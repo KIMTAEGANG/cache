@@ -22,10 +22,4 @@ mybatis:
   mapper-locations: mybatis/mapper/*.xml
 
 
-#logging:
-#  level:
-#    root: info
-#    com.example.demo.controller.ProductController: info
-
-
 
