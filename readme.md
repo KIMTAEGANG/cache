@@ -89,10 +89,16 @@
 
 ![](image/view.PNG)
 
-* 기능
+* errorPage
 
-  1. userid와 pcode를 입력해서 검색 가능
+![](image/error.PNG )
+
+
+
+* 기능
+1. userid와 pcode를 입력해서 검색 가능
   2. category 선택을 통해서 web과 mobile버전중 선택해서 검색 가능
   3. Ehcache 와 Redis  cache 삭제 기능
   4. log 기록 저장
+  5. error 페이지 설정
 

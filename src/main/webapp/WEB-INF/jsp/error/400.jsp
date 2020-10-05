@@ -69,7 +69,7 @@
     <div class="err">4</div>
     <div class="far">0</div>
     <div class="err2">0</div>
-    <div class="msg">주소를 잘못 입력하셨습니다
+    <div class="msg">파라미터를 입력하지 않았습니다
         <p>기본 페이지로 이동하시려면 아래를 눌러주세요</p>
         <a href="/getId?userid=&pcode=">web</a>
         <a href="/getIdM?userid=&pcode=">mobile</a>
