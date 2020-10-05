@@ -14,12 +14,9 @@ public class ProductServiceImp implements ProductService {
     private final ProductMapper productMapper;
 
     @Autowired
-    ProductServiceImp(
-            ProductMapper productMapper
-    ) {
+    ProductServiceImp(ProductMapper productMapper) {
         this.productMapper = productMapper;
     }
-
 
     @Override
     @Cacheable(cacheNames = "getMember", key = "{#userid, #pcode}", unless = "#result == null")

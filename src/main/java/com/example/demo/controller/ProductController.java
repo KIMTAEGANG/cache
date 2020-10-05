@@ -12,9 +12,7 @@ import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -41,8 +39,7 @@ public class ProductController {
     private final static Logger log = LoggerFactory.getLogger(ProductController.class);
 
     //web
-    @GetMapping(value = "getId", produces = "application/json")
-    @ResponseBody
+    @GetMapping("getId")
     public ModelAndView getId(@RequestParam String userid, @RequestParam String pcode, ModelAndView mv) {
         try {
             Cache cache = cacheManager.getCache("getMember");
@@ -79,22 +76,21 @@ public class ProductController {
         }
     }
 
-    @RequestMapping("ehcacheDel")
+    @GetMapping("ehcacheDel")
     public String ehcacheDel(ModelAndView mv){
         Cache cache = cacheManager.getCache("getMember");
         cache.clear();
         return "redirect:getId?userid=&pcode=";
     }
 
-    @RequestMapping("redisDel")
+    @GetMapping("redisDel")
     public String redisDel(){
         jedis.flushAll();
         return "redirect:getId?userid=&pcode=";
     }
 
     //mobile
-    @GetMapping(value="getIdM", produces = "application/json")
-    @ResponseBody
+    @GetMapping("getIdM")
     public ModelAndView getIdM(@RequestParam String userid, @RequestParam String pcode, ModelAndView mv){
         try{
             mv.setViewName("cacheM");
@@ -131,14 +127,14 @@ public class ProductController {
         }
     }
 
-    @RequestMapping("ehcacheMDel")
+    @GetMapping("ehcacheMDel")
     public String ehcacheMDel(){
         Cache cache = cacheManager.getCache("getMemberM");
         cache.clear();
         return "redirect:getIdM?userid=&pcode=";
     }
 
-    @RequestMapping("redisMDel")
+    @GetMapping("redisMDel")
     public String redisMDel(){
         jedis.flushAll();
         return "redirect:getIdM?userid=&pcode=";

@@ -9,7 +9,7 @@
     </select>
 
     <select id="getIdM" parameterType="String" resultType="java.util.HashMap">
-        select USERID,PCODE,PNM,IMGPATH from dreamsearch.SHOP_DATA
+        select USERID,PCODE,PNM,IMGPATH from dreamsearch.MOB_SHOP_DATA
         where userid=#{userid} and pcode like concat('%',#{pcode},'%')
     </select>
 

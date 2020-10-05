@@ -20,6 +20,3 @@ spring:
 mybatis:
   type-aliases-package: com.example.test
   mapper-locations: mybatis/mapper/*.xml
-
-
-

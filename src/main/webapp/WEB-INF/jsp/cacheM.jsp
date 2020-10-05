@@ -53,17 +53,17 @@
             <table class="table">
                 <tr>
                     <td width="100">ehcacheM</td>
-                    <td colspan="2">${ehcachValM}<br/><br/></td>
+                    <td>${ehcachValM}<br/><br/></td>
                     <td style="text-align:right;"><button type="button" class="btn btn-primary" id="ehcacheBtn">Delete</button></td>
                 </tr>
                 <tr>
                     <td width="100">redisM</td>
-                    <td colspan="2">${redisValueM}<br/><br/></td>
+                    <td>${redisValueM}<br/><br/></td>
                     <td style="text-align:right;"><button type="button" class="btn btn-primary" id="redisBtn">Delete</button></td>
                 </tr>
                 <tr>
                     <td width="100">dbM</td>
-                    <td colspan="2">${getDBM}<br/><br/></td>
+                    <td>${getDBM}<br/><br/></td>
                     <td style="text-align:right;"></td>
                 </tr>
             </table>
