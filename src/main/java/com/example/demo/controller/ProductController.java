@@ -51,19 +51,22 @@ public class ProductController {
             mv.addObject("userid", userid);
             mv.addObject("pcode", pcode);
 
+            String rediskey = "getMember::" + userid + "," + pcode;
+            String redisValue = jedis.get(rediskey);
+
+            //ehcache 조회
             if (!StringUtils.isEmpty(cache.get(ehcacheKey))) {
                 mv.addObject("ehcacheVal", cache.get(ehcacheKey).get());
                 return mv;
             }
 
-            String rediskey = "getMember::" + userid + "," + pcode;
-            String redisValue = jedis.get(rediskey);
-
+            //redis 조회
             if (!StringUtils.isEmpty(redisValue)) {
                 cache.put(ehcacheKey, redisValue);
                 mv.addObject("redisValue", redisValue);
                 return mv;
             } else {
+                //db 조회
                 List<Map<String, Object>> getDB = productService.getId(userid, pcode);
                 jedis.set(rediskey, String.valueOf(getDB));
                 cache.put(ehcacheKey, getDB);
@@ -76,6 +79,7 @@ public class ProductController {
         }
     }
 
+    //ehcache 삭제(web)
     @GetMapping("ehcacheDel")
     public String ehcacheDel(ModelAndView mv){
         Cache cache = cacheManager.getCache("getMember");
@@ -83,6 +87,7 @@ public class ProductController {
         return "redirect:getId?userid=&pcode=";
     }
 
+    //redis cache 삭제(web)
     @GetMapping("redisDel")
     public String redisDel(){
         jedis.flushAll();
@@ -102,19 +107,22 @@ public class ProductController {
             cacheKeyM.add(userid);
             cacheKeyM.add(pcode);
 
+            String redisKeyM = "getMemberM::"+userid+","+pcode;
+            String redisValueM = jedis.get(redisKeyM);
+
+            //ehcache조회
             if(!StringUtils.isEmpty(cache.get(cacheKeyM))){
                 mv.addObject("ehcachValM",cache.get(cacheKeyM).get());
                 return mv;
             }
 
-            String redisKeyM = "getMemberM::"+userid+","+pcode;
-            String redisValueM = jedis.get(redisKeyM);
-
+            //redis조회
             if(!StringUtils.isEmpty(redisValueM)){
                 cache.put(cacheKeyM,redisValueM);
                 mv.addObject("redisValueM",redisValueM);
                 return mv;
             }else {
+                //db 조회
                 List<Map<String, Object>> getDBM = productService.getIdM(userid, pcode);
                 jedis.set(redisKeyM, String.valueOf(getDBM));
                 cache.put(cacheKeyM, getDBM);
@@ -127,6 +135,7 @@ public class ProductController {
         }
     }
 
+    //ehcache 삭제(mobile)
     @GetMapping("ehcacheMDel")
     public String ehcacheMDel(){
         Cache cache = cacheManager.getCache("getMemberM");
@@ -134,6 +143,7 @@ public class ProductController {
         return "redirect:getIdM?userid=&pcode=";
     }
 
+    //redis cache 삭제(mobile)
     @GetMapping("redisMDel")
     public String redisMDel(){
         jedis.flushAll();

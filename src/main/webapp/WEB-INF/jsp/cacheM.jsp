@@ -19,10 +19,12 @@
             }
         });
 
+        //ehcache 삭제
         $("#ehcacheBtn").click(function(){
             location.href="ehcacheMDel"
         });
 
+        //redis cache 삭제
         $("#redisBtn").click(function(){
             location.href="redisMDel"
         });
